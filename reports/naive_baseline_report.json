@@ -1,0 +1,171 @@
+{
+  "aggregate": {
+    "faithfulness": 0.9136904761904763,
+    "answer_relevancy": 0.8956377689939117,
+    "context_precision": 0.8499999999249999,
+    "context_recall": 0.7583333333333333
+  },
+  "num_questions": 20,
+  "failures": [
+    {
+      "question": "Lương thử việc của nhân viên Junior mức cao nhất là bao nhiêu?",
+      "answer": "Không tìm thấy.",
+      "ground_truth": "Junior cao nhất là 20.000.000 VNĐ/tháng. Lương thử việc = 85% x 20.000.000 = 17.000.000 VNĐ/tháng.",
+      "avg_score": 0.25,
+      "scores": {
+        "faithfulness": 1.0,
+        "context_recall": 0.0,
+        "context_precision": 0.0,
+        "answer_relevancy": 0.0
+      },
+      "worst_metric": "context_recall",
+      "score": 0.0,
+      "diagnosis": "Missing relevant chunks — retriever không lấy đủ thông tin cần thiết",
+      "suggested_fix": "Improve chunking (parent-child), thêm BM25/HyQA, tăng top_k cho multi-hop"
+    },
+    {
+      "question": "Thâm niên bao nhiêu năm thì được cộng thêm ngày phép?",
+      "answer": "Theo chính sách hiện hành, nhân viên có thâm niên từ **5 năm trở lên** được cộng thêm **1 ngày phép** cho mỗi 5 năm làm việc liên tục (ví dụ: nhân viên 10 năm thâm niên được 14 ngày phép). \n\n*(Lưu ý: Ở phiên bản cũ, quy định thâm niên là từ **3 năm trở lên** được cộng thêm **1 ngày phép** cho mỗi 3 năm làm việc liên tục).*",
+      "ground_truth": "Theo chính sách v2024 hiện hành, nhân viên có thâm niên từ 3 năm trở lên được cộng thêm 1 ngày phép cho mỗi 3 năm. Chính sách cũ v2023 yêu cầu 5 năm.",
+      "avg_score": 0.6495,
+      "scores": {
+        "faithfulness": 0.6667,
+        "context_recall": 0.0,
+        "context_precision": 1.0,
+        "answer_relevancy": 0.9314
+      },
+      "worst_metric": "context_recall",
+      "score": 0.0,
+      "diagnosis": "Missing relevant chunks — retriever không lấy đủ thông tin cần thiết",
+      "suggested_fix": "Improve chunking (parent-child), thêm BM25/HyQA, tăng top_k cho multi-hop"
+    },
+    {
+      "question": "Một nhân viên Senior có 9 năm thâm niên được nghỉ bao nhiêu ngày phép năm và lương trong khoảng nào?",
+      "answer": "Dựa trên chính sách hiện hành (mới nhất), nhân viên có 9 năm thâm niên được cộng thêm 1 ngày phép cho mỗi 5 năm làm việc liên tục, tổng cộng được **14 ngày phép năm** (như ví dụ trong chính sách). \n\n*(Lưu ý: Chính sách cũ hơn quy định nhân viên 9 năm thâm niên được 18 ngày phép, nhưng đã bị thay thế bởi phiên bản hiện hành).*\n\nContext không có thông tin về mức lương cụ thể (khoảng lương) của nhân viên Senior.",
+      "ground_truth": "Theo chính sách v2024: 15 ngày cơ bản + 3 ngày thâm niên (9÷3=3) = 18 ngày phép. Lương Senior (P3-P4): 20-35 triệu VNĐ/tháng.",
+      "avg_score": 0.6955,
+      "scores": {
+        "faithfulness": 0.3333,
+        "context_recall": 0.5,
+        "context_precision": 1.0,
+        "answer_relevancy": 0.9488
+      },
+      "worst_metric": "faithfulness",
+      "score": 0.3333,
+      "diagnosis": "LLM hallucinating — câu trả lời có claim không có trong context",
+      "suggested_fix": "Tighten prompt (chỉ dựa trên context), lower temperature, trích dẫn nguồn"
+    },
+    {
+      "question": "Thông tin lương thuộc cấp độ phân loại dữ liệu nào?",
+      "answer": "Thông tin lương thuộc cấp độ **Bí mật** (Cấp độ 3).",
+      "ground_truth": "Theo quy chế chi trả lương, thông tin lương được phân loại là dữ liệu Bí mật, cấm chia sẻ với đồng nghiệp. Theo chính sách phân loại dữ liệu, dữ liệu Bí mật (cấp 3) phải mã hóa khi truyền và hạn chế truy cập theo need-to-know.",
+      "avg_score": 0.7465,
+      "scores": {
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 0.0,
+        "answer_relevancy": 0.9861
+      },
+      "worst_metric": "context_precision",
+      "score": 0.0,
+      "diagnosis": "Too many irrelevant chunks — context nhiễu, chunk liên quan bị xếp thấp",
+      "suggested_fix": "Add reranking, metadata filter (version/category), giảm top_k"
+    },
+    {
+      "question": "Nếu cần mua một chiếc laptop 30 triệu cho nhân viên mới, ai phê duyệt và cần gì từ phòng CNTT?",
+      "answer": "Dựa trên context:\n\n* **Ai phê duyệt:** Chờ phê duyệt theo thẩm quyền tương ứng (và theo phần Phê duyệt chung: cần được phê duyệt bởi **quản lý trực tiếp** trước khi nộp phòng Tài chính).\n* **Cần gì từ phòng CNTT:** Cần có **xác nhận của phòng CNTT về cấu hình kỹ thuật** trước khi đề xuất (vì đây là mua sắm thiết bị CNTT). \n\n*(Ngoài ra, do đơn hàng trên 10.000.000 VNĐ, cần đính kèm ít nhất 3 báo giá trên hệ thống Procurement Portal).*",
+      "ground_truth": "Laptop 30 triệu nằm trong khoảng 5-50 triệu nên cần Giám đốc phòng ban (Director) phê duyệt. Ngoài ra, mua sắm thiết bị CNTT cần có xác nhận cấu hình kỹ thuật từ phòng CNTT trước khi đề xuất. Cần đính kèm ít nhất 3 báo giá vì trên 10 triệu.",
+      "avg_score": 0.8239,
+      "scores": {
+        "faithfulness": 0.75,
+        "context_recall": 0.6667,
+        "context_precision": 1.0,
+        "answer_relevancy": 0.879
+      },
+      "worst_metric": "context_recall",
+      "score": 0.6667,
+      "diagnosis": "Missing relevant chunks — retriever không lấy đủ thông tin cần thiết",
+      "suggested_fix": "Improve chunking (parent-child), thêm BM25/HyQA, tăng top_k cho multi-hop"
+    },
+    {
+      "question": "Bao lâu phải đổi mật khẩu một lần?",
+      "answer": "Theo Chính sách mật khẩu phiên bản hiện hành (v2.0, hiệu lực từ 01/07/2024), context không đề cập đến chu kỳ thay đổi mật khẩu. \n\nTuy nhiên, theo phiên bản cũ (v1.0, đã bị thay thế), mật khẩu phải được thay đổi **mỗi 120 ngày** (trước đó ở bản v1.0 đầu trang quy định là **mỗi 90 ngày**).",
+      "ground_truth": "Theo chính sách hiện hành (v2.0), mật khẩu phải được thay đổi mỗi 120 ngày. Chính sách cũ yêu cầu 90 ngày nhưng đã bị thay thế.",
+      "avg_score": 0.824,
+      "scores": {
+        "faithfulness": 0.8571,
+        "context_recall": 0.5,
+        "context_precision": 1.0,
+        "answer_relevancy": 0.9389
+      },
+      "worst_metric": "context_recall",
+      "score": 0.5,
+      "diagnosis": "Missing relevant chunks — retriever không lấy đủ thông tin cần thiết",
+      "suggested_fix": "Improve chunking (parent-child), thêm BM25/HyQA, tăng top_k cho multi-hop"
+    },
+    {
+      "question": "Muốn mua thiết bị trị giá 55 triệu cần ai phê duyệt?",
+      "answer": "Đơn hàng trị giá 55 triệu (trên 50.000.000 VNĐ) cần **Tổng Giám đốc (CEO)** phê duyệt theo phiên bản 2.2. \n\nTuy nhiên, lưu ý rằng chính sách này đã bị thay thế bởi **Chính sách mật khẩu v2.0 từ ngày 01/07/2024**. Vui lòng tham khảo phiên bản mới để biết quy định hiện hành.",
+      "ground_truth": "Đơn hàng trên 50.000.000 VNĐ cần Tổng Giám đốc (CEO) phê duyệt.",
+      "avg_score": 0.8481,
+      "scores": {
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 0.5,
+        "answer_relevancy": 0.8923
+      },
+      "worst_metric": "context_precision",
+      "score": 0.5,
+      "diagnosis": "Too many irrelevant chunks — context nhiễu, chunk liên quan bị xếp thấp",
+      "suggested_fix": "Add reranking, metadata filter (version/category), giảm top_k"
+    },
+    {
+      "question": "Nhân viên tạm ứng 15 triệu, sau 20 ngày mới thanh toán. Bị phạt bao nhiêu?",
+      "answer": "- Phí phạt quá hạn: **2%/tháng** trên số tiền chưa hoàn ứng, tính từ ngày quá hạn (sau 15 ngày), và được khấu trừ vào lương tháng kế tiếp. \n- Ngoài ra, nhân viên sẽ không được phê duyệt tạm ứng mới.",
+      "ground_truth": "Thời hạn thanh toán là 15 ngày. Quá hạn 5 ngày, bị tính phí 2%/tháng trên 15.000.000 VNĐ = 300.000 VNĐ/tháng (tính pro-rata khoảng 50.000 VNĐ cho 5 ngày).",
+      "avg_score": 0.8494,
+      "scores": {
+        "faithfulness": 1.0,
+        "context_recall": 0.5,
+        "context_precision": 1.0,
+        "answer_relevancy": 0.8974
+      },
+      "worst_metric": "context_recall",
+      "score": 0.5,
+      "diagnosis": "Missing relevant chunks — retriever không lấy đủ thông tin cần thiết",
+      "suggested_fix": "Improve chunking (parent-child), thêm BM25/HyQA, tăng top_k cho multi-hop"
+    },
+    {
+      "question": "Có cần kích hoạt xác thực đa yếu tố (MFA) không?",
+      "answer": "Có, tất cả nhân viên bắt buộc kích hoạt MFA cho tài khoản email, VPN và các hệ thống nội bộ. Các phương thức được chấp nhận gồm: ứng dụng Authenticator (ưu tiên), SMS OTP, hoặc YubiKey. \n\n*(Lưu ý: Chính sách này đã được thay thế bởi Chính sách mật khẩu v2.0 từ ngày 01/07/2024).*",
+      "ground_truth": "Có, theo chính sách mật khẩu v2.0 hiện hành, tất cả nhân viên bắt buộc kích hoạt MFA cho email, VPN và hệ thống nội bộ. Chính sách cũ v1.0 không yêu cầu MFA.",
+      "avg_score": 0.852,
+      "scores": {
+        "faithfulness": 1.0,
+        "context_recall": 0.5,
+        "context_precision": 1.0,
+        "answer_relevancy": 0.9081
+      },
+      "worst_metric": "context_recall",
+      "score": 0.5,
+      "diagnosis": "Missing relevant chunks — retriever không lấy đủ thông tin cần thiết",
+      "suggested_fix": "Improve chunking (parent-child), thêm BM25/HyQA, tăng top_k cho multi-hop"
+    },
+    {
+      "question": "Nhân viên được nghỉ bao nhiêu ngày phép năm?",
+      "answer": "Theo chính sách hiện hành (Phiên bản 2024, hiệu lực từ 01/01/2024), nhân viên chính thức được hưởng **15 ngày phép năm** có lương (tăng từ 12 ngày so với phiên bản 2023 đã bị thay thế). Số ngày phép tính theo năm dương lịch, nhân viên vào giữa năm tính pro-rata theo số tháng làm việc thực tế.",
+      "ground_truth": "Theo chính sách hiện hành (v2024), nhân viên được nghỉ 15 ngày phép năm có lương. Chính sách cũ (v2023) là 12 ngày nhưng đã bị thay thế.",
+      "avg_score": 0.8564,
+      "scores": {
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 0.5,
+        "answer_relevancy": 0.9255
+      },
+      "worst_metric": "context_precision",
+      "score": 0.5,
+      "diagnosis": "Too many irrelevant chunks — context nhiễu, chunk liên quan bị xếp thấp",
+      "suggested_fix": "Add reranking, metadata filter (version/category), giảm top_k"
+    }
+  ]
+}
